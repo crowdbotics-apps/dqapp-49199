@@ -1,64 +1,76 @@
-import React from "react"
-import {
-  View,
-  Image,
-  Text,
-  ScrollView,
-  SafeAreaView,
-  StyleSheet
-} from "react-native"
+import React, { useState } from "react";
+import { View, Text, TextInput, Button, SafeAreaView, StyleSheet } from "react-native";
 
-const WelcomeScreen = () => {
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        <View style={styles.group} />
-        <View style={styles.group}>
-          <Image style={styles.logo} source={require("./logo.png")} />
-          <Text style={styles.text}>
-            Let's build something amazing together!
+const SurveyScreen = () => {
+  const [currentScreen, setCurrentScreen] = useState("personalInfo");
+  const [name, setName] = useState("");
+  const [birthYear, setBirthYear] = useState("");
+
+  const goToTestSelection = () => setCurrentScreen("testSelection");
+
+  const goToTest1 = () => setCurrentScreen("test1");
+
+  const submitTest1 = () => setCurrentScreen("finalMessage");
+
+  return <SafeAreaView style={styles.container}>
+      {currentScreen === "personalInfo" && <View style={styles.screen}>
+          <Text style={styles.header}>Опитування</Text>
+          <Text style={styles.label}>ПІБ:</Text>
+          <TextInput style={styles.input} onChangeText={setName} value={name} placeholder="Ваше ПІБ" />
+          <Text style={styles.label}>Рік народження:</Text>
+          <TextInput style={styles.input} onChangeText={setBirthYear} value={birthYear} placeholder="Рік народження" keyboardType="numeric" />
+          <Button title="Продовжити" onPress={goToTestSelection} />
+        </View>}
+      {currentScreen === "testSelection" && <View style={styles.screen}>
+          <Text style={styles.header}>Оберіть тест</Text>
+          <Button title="Тест 1" onPress={goToTest1} />
+          <Button title="Тест 2" disabled />
+        </View>}
+      {currentScreen === "test1" && <View style={styles.screen}>
+          <Text style={styles.header}>Тест 1: ШІ</Text>
+          {
+        /* This is a simplified representation since radio buttons are not directly supported in React Native */
+      }
+          <Text onPress={() => submitTest1()} style={styles.buttonText}>
+            Завершити
           </Text>
-        </View>
-        <Text style={styles.footer}>Made with ❤️ by Crowdbotics</Text>
-      </ScrollView>
-    </SafeAreaView>
-  )
-}
+        </View>}
+      {currentScreen === "finalMessage" && <View style={styles.screen}>
+          <Text style={styles.header}>Дякуємо!</Text>
+          <Text>Дані збережено.</Text>
+        </View>}
+    </SafeAreaView>;
+};
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F8F8FC",
-    height: "100%"
-  },
-  scrollView: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     padding: 20
   },
-  group: {
-    alignItems: "center"
+  screen: {
+    alignItems: "center",
+    width: "100%"
   },
-  logo: {
-    height: 180,
-    width: 180,
-    padding: 40,
-    borderRadius: 30,
-    margin: 40
-  },
-  text: {
-    textAlign: "center",
-    fontSize: 28,
-    color: "#828AB0",
-    fontWeight: 700
-  },
-  footer: {
-    textAlign: "center",
-    fontSize: 18,
-    color: "#828AB0",
-    fontWeight: 700,
+  header: {
+    fontSize: 24,
     marginBottom: 20
+  },
+  label: {
+    alignSelf: "flex-start",
+    marginLeft: 10
+  },
+  input: {
+    height: 40,
+    width: "100%",
+    margin: 12,
+    borderWidth: 1,
+    padding: 10
+  },
+  buttonText: {
+    marginTop: 20,
+    color: 'blue'
   }
-})
-
-export default WelcomeScreen
+});
+export default SurveyScreen;
